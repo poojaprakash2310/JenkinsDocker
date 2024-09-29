@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')  // Docker Hub credentials ID from Jenkins
-    }
     stages {
         stage('Checkout Code') {
             steps {
@@ -15,17 +12,6 @@ pipeline {
                 script {
                     // Build the Docker image using the Dockerfile in the repository
                     def app = docker.build("discoverdevops/sample-node-app")
-                }
-            }
-        }
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    // Log in to Docker Hub and push the Docker image
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_HUB_CREDENTIALS) {
-                        def app = docker.build("discoverdevops/sample-node-app")
-                        app.push('latest')  // Tag and push the image with 'latest'
-                    }
                 }
             }
         }
